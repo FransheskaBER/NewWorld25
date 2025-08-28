@@ -18,39 +18,49 @@ class Player:
         self.points = 0
     
     def add_points(self, milestone_id):
+
         # First look at how many points a player gets with that milestone
         cursor.execute("SELECT points FROM milestones WHERE milestone_id = %s", (milestone_id,))
         result = cursor.fetchone()[0]
         if result:
             milestone_points = result
+
             # Now, we will update the player's points here and in the DB
             self.points += milestone_points
             cursor.execute("UPDATE players SET points = points + %s WHERE player_id = %s", (milestone_points, self.player_id))
             connection.commit()
 
     def gather_resources(self):
+
         # Show the bank resources before asking
-        print("\n\nThese are the current resources in the bank:")
+        print("\n\n\033[1;34m🏦 These are the current resources in the bank:\033[0m")
+
         cursor.execute("SELECT name, amount FROM bank_resources")
         for name, amount in cursor.fetchall():
-            print(f"- {name}: {amount}")
+            icons = {
+                "Oxygen": "💨",
+                "Water": "💧",
+                "Energy": "⚡"}
+            print(f"- {icons.get(name, '❓')} {name}: {amount}")
 
-        print("\n\nWhich resources do you want to take?")
-        print("\n1. Take 3 different resources (Oxygen, Water, Energy)")
-        print("\n2. Take 2 of the same resource")
+        print("\n\n\033[1;33m📦 Which resources do you want to take?\033[0m")
+        print("\033[1;36m1️⃣  Take 3 different resources (💨 Oxygen, 💧 Water, ⚡ Energy)\033[0m")
+        print("\033[1;35m2️⃣  Take 2 of the same resource\033[0m")
 
         try:
-            choice = int(input("\nEnter 1 or 2: "))
+            choice = int(input("\n\033[1;32m👉 Enter 1 or 2: \033[0m"))
         except ValueError:
-            print("Please enter a number (1 or 2).")
+            print("\nPlease enter a number (1 or 2).")
             return self.gather_resources()  # restart this step
         
         if choice == 1:
+
             # First we are going to check availability
             cursor.execute("SELECT resource_id, name, amount FROM bank_resources")
             resources = cursor.fetchall()
             enough = True
             for row in resources:
+
                 # Take the amount by index and store it in a variable
                 amount = row[2]
                 if amount < 1:
@@ -61,15 +71,19 @@ class Player:
                     cursor.execute("UPDATE player_resources SET amount = amount + 1 WHERE player_id = %s AND resource_id = %s", (self.player_id, resource_id))
                     cursor.execute("UPDATE bank_resources SET amount = amount - 1 WHERE resource_id = %s", (resource_id,))
                 connection.commit()
-                print(f"\n--- {self.name} gathered 1 Oxygen, 1 Water, 1 Energy.---")
+
+                msg = f"---✔️ {self.name} gathered 1 💨 Oxygen, 1 💧 Water, 1 ⚡ Energy ✔️---"
+                print("\n\033[1;32m" + msg.center(70) + "\033[0m\n")
+
+
             else:
-                print("\nNot enough resources in the bank for 3 different ones. Falling back to option 2.")
+                print("\n\nNot enough resources in the bank for 3 different ones. Choose option 2.")
                 return self.gather_two_same()
         elif choice == 2:
             return self.gather_two_same()  # Call the function gather_two_same which ask player which resources
 
     def gather_two_same(self):
-        resource_type = input("\nEnter O for Oxygen, W for Water, E for Energy: ").upper()
+        resource_type = input("\n\nEnter O for Oxygen, W for Water, E for Energy: ").upper()
         mapping = {"O": 1, "W": 2, "E": 3}
         if resource_type not in mapping:
             print("\nInvalid resource choice.")
@@ -81,13 +95,18 @@ class Player:
             cursor.execute("UPDATE player_resources SET amount = amount + 2 WHERE player_id = %s AND resource_id = %s", (self.player_id, resource_id))
             cursor.execute("UPDATE bank_resources SET amount = amount - 2 WHERE resource_id = %s", (resource_id,))
             connection.commit()
-            print(f"\n{self.name} gathered 2 of {resource_type}.")
+                      
+            msg = f"---✔️ {self.name} gathered 2 of {resource_type} ✔️---"
+            print("\n\033[1;32m" + msg.center(70) + "\033[0m\n")
+
+
         else:
-            print(f"\nNot enough {resource_type} in the bank.")
+            print(f"\n\nNot enough {resource_type} in the bank.")
 
     def build_feature(self):
         # Fetch player's current resrouces for visibility
-        print(f"\n{self.name}'s current resources:")
+        msg = f"📦 {self.name}'s Current Resources 📦"
+        print("\n\033[1;34m" + msg.center(80, "=") + "\033[0m")
         cursor.execute("SELECT a.name, b.amount FROM player_resources b JOIN bank_resources a ON b.resource_id = a.resource_id WHERE player_id = %s", (self.player_id,))
         for res_name, amount in cursor.fetchall():
             print(f"- {res_name}: {amount}")
@@ -98,7 +117,12 @@ class Player:
         cursor.execute("SELECT feature_id, name, cost_oxygen, cost_water, cost_energy FROM features")
         rows = cursor.fetchall()
         for feature_id, name, cost_oxygen, cost_water, cost_energy in rows:
-            print(f"- {name} = {cost_oxygen} Oxygen + {cost_water} Water + {cost_energy} Energy")
+            print(f"- {name} = "
+                  f"\033[1;36m{cost_oxygen} 💨 Oxygen\033[0m + "
+                  f"\033[1;34m{cost_water} 💧 Water\033[0m + "
+                  f"\033[1;33m{cost_energy} ⚡ Energy\033[0m")
+
+
         feature_type = input("\nEnter F for forest, L for lake and C for city: ").upper()
         mapping = {"F": 1, "L": 2, "C": 3}
         if feature_type not in mapping:
@@ -138,7 +162,7 @@ class Player:
         cursor.execute("SELECT name FROM features WHERE feature_id = %s", (feature_id,))
         feature_name = cursor.fetchone()[0]
         connection.commit()
-        print(f"\n{self.name} built a {feature_name}.")
+        print(f"\n\033[1;32m🏆 {self.name} built a {feature_name}! 🏆\033[0m")
     
     def claim_milestone(self):
         # Fetch current player's feature for visibility
@@ -147,14 +171,15 @@ class Player:
         for feat_name, count in cursor.fetchall():
             print(f"- {feat_name}: {count}")
 
-        print("If you already own the required Features, trade them in to claim the milestone: Habitat, Metropolis or New World.")
+        print("\nIf you already own the required Features, trade them in to claim the milestone: Habitat, Metropolis or New World.")
 
         # Fecth all milestone
         cursor.execute("SELECT milestone_id, name, cost_forest, cost_lake, cost_city, points FROM milestones")
         rows = cursor.fetchall()
         for milestone_id, name, cost_forest, cost_lake, cost_city, points in rows:
-            print(f"- {name} = {cost_forest} Forest + {cost_lake} Lake + {cost_city} City ({points} points)")
-        milestone_type = input("Enter H for habitat, M for metropolis and N for new world: ").upper()
+            print(f"- {name} = {cost_forest} 🌲 Forest + {cost_lake} 💧 Lake + {cost_city} 🏙️ City ({points} ⭐ points)")
+
+        milestone_type = input("\nEnter H for habitat, M for metropolis and N for new world: ").upper()
         mapping = {"H": 1, "M": 2, "N": 3}
         if milestone_type not in mapping:
             print("Invalid feature choice.")
@@ -177,7 +202,7 @@ class Player:
                     enough = False
                     break
         if not enough:
-            print("You don’t have enough features to claim this milestone.")
+            print("\nYou don’t have enough features to claim this milestone.")
             return
         
         # Deduct features
@@ -194,7 +219,8 @@ class Player:
         cursor.execute("SELECT name FROM milestones WHERE milestone_id = %s", (milestone_id,))
         milestone_name = cursor.fetchone()[0]
         connection.commit()
-        print(f"{self.name} claimed the {milestone_name} milestone and now has {self.points} points!")
+        print(f"\n\033[1;33m🏆 {self.name} claimed the {milestone_name} milestone "f"and now has {self.points} points! 🏆\033[0m")
+
 
 class Game:    
     def __init__(self):
@@ -203,16 +229,16 @@ class Game:
 
     def setup(self):
         try:
-            num_players = int(input("How many players (2–3)? "))
+            num_players = int(input("\nHow many players (2–3)? "))
         except ValueError:
             print("\nPlease enter a number: ")
             return self.setup()
         self.current_player_ids = []
         for i in range(num_players):
-            name = input(f"\nEnter name for player {i+1}: ")
+            name = input(f"\n\nEnter name for player {i+1}: ")
             
             # Insert into DB
-            cursor.execute("INSERT INTO players (name, date, winner, points) VALUES (%s, CURRENT_DTAE, false, 0) RETURNING player_id", (name,))
+            cursor.execute("INSERT INTO players (name, date, winner, points) VALUES (%s, CURRENT_DATE, false, 0) RETURNING player_id", (name,))
             player_id = cursor.fetchone()[0]
             self.current_player_ids.append(player_id)
 
@@ -241,19 +267,24 @@ class Game:
             self.players.append(player)
 
         for p in self.players:
-            print(f"\nWelcome {p.name}!")
+            print(f"\n\033[1;36m✨ Welcome {p.name}! ✨\033[0m")
 
     def play_round(self):
         self.round += 1
-        print(f"\n--- Round {self.round} ---")
+        
+        msg = f"👉 {player.name.upper()}'S TURN 👈"
+        print("\n\033[1;30;43m" + msg.center(80) + "\033[0m")   # Black on Yellow
+
+
 
         
         for player in self.players:
-            print(f"\n\n{player.name}'s turn:")
-
+            msg = f"👉 {player.name.upper()}'S TURN 👈"
+            print("\n\033[1;30;43m" + msg.center(80) + "\033[0m")
 
             # Show player's resources
             cursor.execute("SELECT br.name, pr.amount FROM player_resources pr JOIN bank_resources br ON pr.resource_id = br.resource_id WHERE player_id = %s", (player.player_id,))
+            print("\n" + "="*40)
             print(f"\n{player.name}'s current resources:")
             for res_name, amount in cursor.fetchall():
                 print(f"- {res_name}: {amount}")
@@ -264,6 +295,8 @@ class Game:
             for feat_name, count in cursor.fetchall():
                 print(f"- {feat_name}: {count}")
             print(f"- Points: {player.points}")
+            print("\n" + "="*40 + "\n")
+
 
             #  Check if this player can build
             can_build = False
@@ -296,14 +329,17 @@ class Game:
                     break
             
             #  Show choices dynamically
-            print("\n--- Choose action: ---")
+            print("\n" + "="*30)
+            print("🎯  Choose Action  🎯")
+            print("="*30)
+
             print("\n1 = Gather resources")
             if can_build:
                 print("\n2 = Build a feature")
             if can_claim:
                 print("\n3 = Claim a milestone")
             if not can_build and not can_claim:
-                print("\nYou don’t have enough to build or claim anything this turn — you should Gather!")
+                print("\nYou don’t have enough to build or claim anything this turn — you should Gather or take a development card!")
             print("\n4 = Draw a development card")  # always available
             
             # Ask for action
@@ -351,7 +387,8 @@ class Game:
     def check_winner(self):
         for player in self.players:
             if player.points >= 10:
-                print(f"\n{player.name} wins with {player.points} points!")
+                print(f"\n\033[1;37;45m 🎉 {player.name} wins with {player.points} points! 🎉 \033[0m")
+
 
                 from export_results import export_game_results   
 
