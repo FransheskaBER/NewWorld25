@@ -1,4 +1,5 @@
 import psycopg2
+import json
 
 connection = psycopg2.connect(
     database = "NewWorld25",
