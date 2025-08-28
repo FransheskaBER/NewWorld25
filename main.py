@@ -121,15 +121,7 @@ class Player:
             print(f"- {name} = "
                   f"\033[1;36m{cost_oxygen} 💨 Oxygen\033[0m + "
                   f"\033[1;34m{cost_water} 💧 Water\033[0m + "
-                  f"\033[1;33m{cost_energy} ⚡ Energy\033[0m")
-            
-        # Fecth all milestones for visibility
-        cursor.execute("SELECT milestone_id, name, cost_forest, cost_lake, cost_city, points FROM milestones")
-        rows = cursor.fetchall()
-        for milestone_id, name, cost_forest, cost_lake, cost_city, points in rows:
-            print("\n\n-----------Milestone board-------------\n")
-            print(f"- {name} = {cost_forest} 🌲 Forest + {cost_lake} 💧 Lake + {cost_city} 🏙️ City ({points} ⭐ points)")
-
+                  f"\033[1;33m{cost_energy} ⚡ Energy\033[0m") 
 
         feature_type = input("\nEnter F for forest, L for lake and C for city: ").upper()
         mapping = {"F": 1, "L": 2, "C": 3}
