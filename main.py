@@ -1,3 +1,4 @@
+from development_cards import draw_development_card
 import psycopg2
 import json
 
@@ -302,6 +303,7 @@ class Game:
                 print("\n3 = Claim a milestone")
             if not can_build and not can_claim:
                 print("\nYou don’t have enough to build or claim anything this turn — you should Gather!")
+            print("\n4 = Draw a development card")  # always available
             
             # Ask for action
             choice = input("\n\nEnter your choice (or type 'quit' to stop): ")
@@ -334,6 +336,8 @@ class Game:
                 player.build_feature()
             elif choice == "3" and can_claim:
                 player.claim_milestone()
+            elif choice == "4":
+                draw_development_card(player.player_id, player.name)
             else:
                 print("Invalid choice, turn skipped.")
 
