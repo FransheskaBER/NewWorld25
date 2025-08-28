@@ -99,15 +99,18 @@ class Player:
         for feature_id, name, cost_oxygen, cost_water, cost_energy in rows:
             print(f"- {name} = {cost_oxygen} Oxygen + {cost_water} Water + {cost_energy} Energy")
         feature_type = input("\nEnter F for forest, L for lake and C for city: ").upper()
-        mapping = {"\nF": 1, "L": 2, "C": 3}
+        mapping = {"F": 1, "L": 2, "C": 3}
         if feature_type not in mapping:
             print("\nInvalid feature choice.")
             return
+        
         # Fech feature_id from the player's input
         feature_id = mapping[feature_type]
+        
         # Get feature costs from DB
         cursor.execute("SELECT cost_oxygen, cost_water, cost_energy FROM features WHERE feature_id = %s", (feature_id,))
         cost_oxygen, cost_water, cost_energy = cursor.fetchone()
+        
         # Check if player has enough resources
         enough = True
         for resource_id, required_per_feature in [(1, cost_oxygen), (2, cost_water), (3, cost_energy)]:
@@ -120,12 +123,15 @@ class Player:
         if not enough:
             print("\nYou don’t have enough resources to build this feature.")
             return
+        
         # Deduct resources from player and return them to the bank
         for resource_id, required_per_feature in [(1, cost_oxygen), (2, cost_water), (3, cost_energy)]:
+        
         # the resource id is for example oxygen 1 and the cost_oxygen is how much oxygen we need for this feature? 2, 1, etc..
             if required_per_feature > 0:
                 cursor.execute("UPDATE player_resources SET amount = amount - %s WHERE player_id = %s AND resource_id = %s", (required_per_feature, self.player_id, resource_id))
                 cursor.execute("UPDATE bank_resources SET amount = amount + %s WHERE resource_id = %s", (required_per_feature, resource_id))
+        
         # Add feature to player_features
         cursor.execute("UPDATE player_features SET count = count + 1 WHERE player_id = %s AND feature_id = %s", (self.player_id, feature_id))
         cursor.execute("SELECT name FROM features WHERE feature_id = %s", (feature_id,))
@@ -224,7 +230,7 @@ class Game:
             cursor.execute("SELECT milestone_id FROM milestones")
             milestone_ids = cursor.fetchall()
             for (m_id,) in milestone_ids:
-                cursor.execute("INSERT INTO player_features (player_id, feature_id, count) VALUES (%s, %s, 0)", (player_id, m_id))
+                cursor.execute("INSERT INTO player_milestones (player_id, milestone_id, count) VALUES (%s, %s, 0)", (player_id, m_id))
 
             connection.commit()
 
@@ -245,7 +251,7 @@ class Game:
 
 
             # Show player's resources
-            cursor.execute("SELECT br.name, pr.amount FROM player_resources pr JOIN bank_resources br ON pr.resource_id = br.resource_id WHERE player_id = %s""", (player.player_id,))
+            cursor.execute("SELECT br.name, pr.amount FROM player_resources pr JOIN bank_resources br ON pr.resource_id = br.resource_id WHERE player_id = %s", (player.player_id,))
             print(f"\n{player.name}'s current resources:")
             for res_name, amount in cursor.fetchall():
                 print(f"- {res_name}: {amount}")
