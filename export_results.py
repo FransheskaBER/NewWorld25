@@ -68,3 +68,4 @@ def export_game_results():
     
     results["winner"] = winner
     results["date"] = date
+    return results

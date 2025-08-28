@@ -56,16 +56,16 @@ cursor = connection.cursor()
 
 # connection.commit()
 
-cursor.execute("""INSERT INTO bank_resources (name, amount) VALUES ('Oxygen', 6), ('Water', 6), ('Energy', 6);""")
+# cursor.execute("""INSERT INTO bank_resources (name, amount) VALUES ('Oxygen', 6), ('Water', 6), ('Energy', 6);""")
 
-cursor.execute("""INSERT INTO features (name, cost_oxygen, cost_water, cost_energy) VALUES
-               ('Forest', 2, 1, 0),
-               ('Lake', 0, 2, 1),
-               ('City', 1, 1, 2);""")
+# cursor.execute("""INSERT INTO features (name, cost_oxygen, cost_water, cost_energy) VALUES
+#                ('Forest', 2, 1, 0),
+#                ('Lake', 0, 2, 1),
+#                ('City', 1, 1, 2);""")
 
-cursor.execute("""INSERT INTO milestones (name, cost_forest, cost_lake, cost_city, points) VALUES
-               ('Habitat', 1, 1, 0, 3),
-               ('Metropolis', 0, 0, 2, 5),
-               ('New World', 2, 2, 1, 10);""")
+# cursor.execute("""INSERT INTO milestones (name, cost_forest, cost_lake, cost_city, points) VALUES
+#                ('Habitat', 1, 1, 0, 3),
+#                ('Metropolis', 0, 0, 2, 5),
+#                ('New World', 2, 2, 1, 10);""")
 
-connection.commit()
+# connection.commit()

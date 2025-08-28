@@ -201,15 +201,18 @@ class Game:
         self.players = []
         self.round = 0
 
-    def setup(self):
-        try:
-            num_players = int(input("How many players (2–3)? "))
-        except ValueError:
-            print("\nPlease enter a number: ")
-            return self.setup()
+    def setup(self, num_players, names =None):
+        if names is None:
+            names = [f"Player {i+1}" for i in range(num_players)]
+
+        # try:
+        #     num_players = int(input("How many players (2–3)? "))
+        # except ValueError:
+        #     print("\nPlease enter a number: ")
+        #     return self.setup()
         
         for i in range(num_players):
-            name = input(f"\nEnter name for player {i+1}: ")
+            name = names[i]
             
             # Insert into DB
             cursor.execute("INSERT INTO players (name) VALUES (%s) RETURNING player_id", (name,))
