@@ -1,5 +1,6 @@
 import psycopg2
 import json
+import datetime
 
 connection = psycopg2.connect(
     database = "NewWorld25",
@@ -10,62 +11,69 @@ connection = psycopg2.connect(
     )
 cursor = connection.cursor()
 
-def export_game_results():
+def export_game_results(current_player_ids=None):
 
     results = {
         "date": None,
         "winner": None,
         "players": []
         }
+    
+    if current_player_ids:
+        cursor.execute("SELECT player_id, name, points, date FROM players WHERE player_id = ANY(%s);", (current_player_ids,))
+    else:
+        # fallback: only today's players
+        cursor.execute("SELECT player_id, name, points, date FROM players WHERE date = CURRENT_DATE;")
 
-    cursor.execute("SELECT player_id, name, points, date FROM players")
     players = cursor.fetchall()
 
-    max_points = 0
+    max_points = -1
     winner = None
 
-    for player_id, name, points, date in players:
+    for player_id, player_name, points, date in players:
         if points > max_points:
             max_points = points
-            winner = name
+            winner = player_name
 
         #  collect resources
         resources = {}
-        cursor.execute(f'''SELECT a.name, b.amount
-                       FROM player_resources b
-                       JOIN bank_resources a ON b.resource_id = a.resource_id
-                       WHERE b.player_id = %s''', (player_id,))
+        cursor.execute(f'''SELECT br.name AS resource_name, pr.amount
+                        FROM player_resources pr
+                        JOIN bank_resources br ON pr.resource_id = br.resource_id
+                        WHERE pr.player_id = %s;''', (player_id,))
         rows = cursor.fetchall()
-        for name, amount in rows:
-            resources[name] = amount
+        for r_name, amount in rows:
+            resources[r_name] = amount
 
         # collect features
         features = {}
-        cursor.execute(f'''SELECT a.name, b.count
-                       FROM player_features b
-                       JOIN features a ON b.feature_id = a.feature_id
-                       WHERE b.player_id = %s''', (player_id,))
+        cursor.execute(f'''SELECT f.name AS feature_name, pf.count
+                        FROM player_features pf
+                        JOIN features f ON pf.feature_id = f.feature_id
+                        WHERE pf.player_id = %s;''', (player_id,))
         rows = cursor.fetchall()
-        for name, count in rows:
-            features[name] = count
+        for f_name, count in rows:
+            features[f_name] = count
 
         # collect milestones
         milestones = {}
-        cursor.execute(f'''SELECT a.name, b.count
-                       FROM player_milestones b
-                       JOIN milestones a ON b.milestone_id = a.milestone_id
-                       WHERE b.player_id = %s''', (player_id,))
+        cursor.execute(f'''SELECT m.name AS milestone_name, pm.count
+                        FROM player_milestones pm
+                        JOIN milestones m ON pm.milestone_id = m.milestone_id
+                        WHERE pm.player_id = %s;''', (player_id,))
         rows = cursor.fetchall()
-        for name, count in rows:
-            milestones[name] = count
+        for m_name, count in rows:
+            milestones[m_name] = count
         
         results['players'].append({
-            "name": name,
+            "name": player_name,
             "points": points,
             "resources": resources,
             "features": features,
             "milestones": milestones})
+        
+        if results["date"] is None:
+            results["date"] = str(date)
     
     results["winner"] = winner
-    results["date"] = date
     return results

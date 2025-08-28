@@ -1,1 +1,348 @@
-null
+{
+    "date": "2025-08-28",
+    "winner": "Lucia",
+    "players": [
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 3,
+                "Water": 2,
+                "Energy": 3
+            },
+            "features": {
+                "City": 0,
+                "Lake": 2,
+                "Forest": 1
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "Habitat",
+            "points": 3,
+            "resources": {
+                "Oxygen": 1,
+                "Water": 0,
+                "Energy": 2
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 1
+            },
+            "milestones": {
+                "Metropolis": 0,
+                "New World": 0,
+                "Habitat": 1
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Water": 2,
+                "Energy": 2,
+                "Oxygen": 4
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 2,
+                "Water": 4,
+                "Energy": 2
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 1,
+                "Water": 1,
+                "Energy": 1
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        },
+        {
+            "name": "New World",
+            "points": 0,
+            "resources": {
+                "Oxygen": 0,
+                "Water": 0,
+                "Energy": 0
+            },
+            "features": {
+                "Forest": 0,
+                "Lake": 0,
+                "City": 0
+            },
+            "milestones": {
+                "Habitat": 0,
+                "Metropolis": 0,
+                "New World": 0
+            }
+        }
+    ]
+}

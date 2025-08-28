@@ -201,22 +201,20 @@ class Game:
         self.players = []
         self.round = 0
 
-    def setup(self, num_players, names =None):
-        if names is None:
-            names = [f"Player {i+1}" for i in range(num_players)]
-
-        # try:
-        #     num_players = int(input("How many players (2–3)? "))
-        # except ValueError:
-        #     print("\nPlease enter a number: ")
-        #     return self.setup()
-        
+    def setup(self):
+        try:
+            num_players = int(input("How many players (2–3)? "))
+        except ValueError:
+            print("\nPlease enter a number: ")
+            return self.setup()
+        self.current_player_ids = []
         for i in range(num_players):
-            name = names[i]
+            name = input(f"\nEnter name for player {i+1}: ")
             
             # Insert into DB
-            cursor.execute("INSERT INTO players (name) VALUES (%s) RETURNING player_id", (name,))
+            cursor.execute("INSERT INTO players (name, date, winner, points) VALUES (%s, CURRENT_DTAE, false, 0) RETURNING player_id", (name,))
             player_id = cursor.fetchone()[0]
+            self.current_player_ids.append(player_id)
 
             # Create default rows in player_resources
             cursor.execute("SELECT resource_id FROM bank_resources")
@@ -320,7 +318,7 @@ class Game:
                 results = export_game_results()
 
                 with open("game_results.json", "w") as f:
-                    json.dump(results, f, indent=4)
+                    json.dump(results, f, indent=4, default=str)
                 
                 # Reset DB tables
                 cursor.execute("UPDATE bank_resources SET amount = 6;")
@@ -360,7 +358,7 @@ class Game:
                 results = export_game_results()
 
                 with open("game_results.json", "w") as f:
-                    json.dump(results, f, indent=4)
+                    json.dump(results, f, indent=4, default=str)
                 
                 return True
         
@@ -405,7 +403,7 @@ if __name__ == "__main__":
         results = export_game_results()
 
         with open("game_results.json", "w") as f:
-            json.dump(results, f, indent=4)
+            json.dump(results, f, indent=4, default=str)
 
 
 
