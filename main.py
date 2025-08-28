@@ -105,13 +105,14 @@ class Player:
 
     def build_feature(self):
         # Fetch player's current resrouces for visibility
-        msg = f"📦 {self.name}'s Current Resources 📦"
-        print("\n\033[1;34m" + msg.center(80, "=") + "\033[0m")
-        cursor.execute("SELECT a.name, b.amount FROM player_resources b JOIN bank_resources a ON b.resource_id = a.resource_id WHERE player_id = %s", (self.player_id,))
-        for res_name, amount in cursor.fetchall():
-            print(f"- {res_name}: {amount}")
+        # msg = f"📦 {self.name}'s Current Resources 📦"
+        # print("\n\033[1;34m" + msg.center(80, "=") + "\033[0m")
+        # cursor.execute("SELECT a.name, b.amount FROM player_resources b JOIN bank_resources a ON b.resource_id = a.resource_id WHERE player_id = %s", (self.player_id,))
+        # for res_name, amount in cursor.fetchall():
+        #     print(f"- {res_name}: {amount}")
 
-        print("\nSpend your resources to build a Forest, Lake, or City.")
+        msg = f"📦 Spend your resources to build a Forest, Lake, or City 📦"
+        print("\n\033[1;34m" + msg.center(80, "=") + "\033[0m\n")
         
         # Fetch all the features we have for visibility
         cursor.execute("SELECT feature_id, name, cost_oxygen, cost_water, cost_energy FROM features")
@@ -121,6 +122,13 @@ class Player:
                   f"\033[1;36m{cost_oxygen} 💨 Oxygen\033[0m + "
                   f"\033[1;34m{cost_water} 💧 Water\033[0m + "
                   f"\033[1;33m{cost_energy} ⚡ Energy\033[0m")
+            
+        # Fecth all milestones for visibility
+        cursor.execute("SELECT milestone_id, name, cost_forest, cost_lake, cost_city, points FROM milestones")
+        rows = cursor.fetchall()
+        for milestone_id, name, cost_forest, cost_lake, cost_city, points in rows:
+            print("\n\n-----------Milestone board-------------\n")
+            print(f"- {name} = {cost_forest} 🌲 Forest + {cost_lake} 💧 Lake + {cost_city} 🏙️ City ({points} ⭐ points)")
 
 
         feature_type = input("\nEnter F for forest, L for lake and C for city: ").upper()
@@ -166,12 +174,12 @@ class Player:
     
     def claim_milestone(self):
         # Fetch current player's feature for visibility
-        print(f"\n{self.name}'s current features:")
+        print(f"\n\n{self.name}'s current features:\n")
         cursor.execute("SELECT a.name, b.count FROM player_features b JOIN features a ON b.feature_id = a.feature_id WHERE player_id = %s", (self.player_id,))
         for feat_name, count in cursor.fetchall():
             print(f"- {feat_name}: {count}")
 
-        print("\nIf you already own the required Features, trade them in to claim the milestone: Habitat, Metropolis or New World.")
+        print("\nIf you already own the required Features, trade them in to claim the milestone: Habitat, Metropolis or New World.\n")
 
         # Fecth all milestone
         cursor.execute("SELECT milestone_id, name, cost_forest, cost_lake, cost_city, points FROM milestones")
@@ -271,13 +279,7 @@ class Game:
 
     def play_round(self):
         self.round += 1
-        
-        msg = f"👉 {player.name.upper()}'S TURN 👈"
-        print("\n\033[1;30;43m" + msg.center(80) + "\033[0m")   # Black on Yellow
-
-
-
-        
+                
         for player in self.players:
             msg = f"👉 {player.name.upper()}'S TURN 👈"
             print("\n\033[1;30;43m" + msg.center(80) + "\033[0m")
